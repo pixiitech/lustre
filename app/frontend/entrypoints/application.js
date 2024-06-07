@@ -2,7 +2,7 @@ import { createApp, defineAsyncComponent } from "vue";
 import vuetify from "~/plugins/vuetify";
 import './style.css';
 
-import App from '../App'
+import App from '~/app'
 const PagesIndex = defineAsyncComponent(() => import("~/pages/index"));
 
 const app = createApp(App);
