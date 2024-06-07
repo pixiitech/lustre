@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_04_191042) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_06_165929) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -39,7 +39,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_04_191042) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "series_id"
+    t.integer "mint_type", default: 0, null: false
     t.index ["series_id"], name: "index_coin_varieties_on_series_id"
+  end
+
+  create_table "grade_values", force: :cascade do |t|
+    t.integer "grade"
+    t.float "value"
+    t.integer "coin_variety_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coin_variety_id"], name: "index_grade_values_on_coin_variety_id"
   end
 
   create_table "series", force: :cascade do |t|
