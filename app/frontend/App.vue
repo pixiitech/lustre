@@ -1,25 +1,17 @@
 <template>
-  <div>
-    <h1>{{ message }}</h1>
-    <button @click="reverseMessage">Reverse Message</button>
-  </div>
+  <v-app id="vuetify-app">
+    <v-main>
+      <p>Vuetify 3 App Running 🍾🎉</p>
+      <p>Message= {{ message }}</p>
+      <slot></slot>
+    </v-main>
+  </v-app>
 </template>
+
 <script>
   export default {
-    data() {
-      return {
-        message: 'Hello, Vue!'
-      }
+    props: {
+      message: { type: String, required: true },
     },
-    methods: {
-      reverseMessage() {
-        this.message = this.message.split('').reverse().join('')
-      }
-    }
-  }
+  };
 </script>
-<style>
-  h1 {
-    color: blue;
-  }
-</style>

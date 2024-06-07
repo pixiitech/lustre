@@ -4,12 +4,15 @@
     "build": "bunx --bun vite build"
   },
   "devDependencies": {
+    "sass": "^1.77.4",
     "vite": "^5.2.12",
     "vite-plugin-ruby": "^5.0.0"
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
+    "axios": "^1.7.2",
     "vite-plugin-rails": "^0.5.0",
+    "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.27"
   }
 }
