@@ -3,10 +3,10 @@
 Lustre is a Ruby on Rails/Vue.js single-page application for fetching
 rare and antique coin prices and descriptions from PCGS's API.
 
-![Price Guide Categories](https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-1.png "Price Guide Categories"){:height="200px" width="50px"}
-![Price Guide Result](https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-2.png "Price Guide Result"){:height="200px" width="50px"}
-![Price Guide Result 2](https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-3.png "Price Guide Result 2"){:height="200px" width="50px"}
-![PCGS Holder Lookup](https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/holder-lookup-screenshot-1.png "PCGS Holder Lookup"){:height="200px" width="50px"}
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-1.png" width="300" height="450" alt="Price Guide Categories" />
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-2.png" width="300" height="450" alt="Price Guide Result" />
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-3.png" width="300" height="450" alt="Price Guide Result 2" />
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/holder-lookup-screenshot-1.png" width="300" height="450" alt="PCGS Holder Lookup" />
 
 * System dependencies
     - Ruby 3.3.1
