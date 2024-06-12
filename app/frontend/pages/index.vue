@@ -8,37 +8,22 @@
     </button>
     <v-card class="tab" v-if="selectedTab === 'lookup'" variant="tonal">
       <input type="text" name="cert_number" placeholder="Enter 8-digit PCGS #" v-model="certificateNumber" />
-      <button @click="fetchCertData()" v-disabled="!certificateNumber">
+      <button @click="fetchCertData()" :disabled="!certificateNumber">
         Submit
       </button>
       <v-card variant="outlined" v-if="loading" class="spinner">
         Fetching Data...
       </v-card>
-      <v-card variant="outlined" v-if="certificateDetails" class="coin-details">
-        <v-list lines="one">
-          <v-list-item :title="certificateDetails.Name" />
-          <v-list-item title="PCGS No." :subtitle="certificateDetails.PCGSNo" />
-          <v-list-item title="Cert No." :subtitle="certificateDetails.CertNo" />
-          <v-list-item :title="'Value for ' + certificateDetails.Grade" :subtitle="`$${certificateDetails.PriceGuideValue}` || 'None Available'" />
-          <v-list-item title="Denomination" :subtitle="certificateDetails.Denomination" />
-          <v-list-item title="Metal Content" :subtitle="certificateDetails.MetalContent" />
-          <v-list-item title="Designer" :subtitle="certificateDetails.Designer" />
-          <v-list-item title="Mintage" :subtitle="certificateDetails.Mintage" />
-          <v-list-item title="Diameter" :subtitle="certificateDetails.Diameter" />
-          <v-list-item title="Edge" :subtitle="certificateDetails.Edge" />
-          <v-list-item title="Weight" :subtitle="certificateDetails.Weight" />
-          <v-list-item title="PCGS Population" :subtitle="certificateDetails.Population" />
-          <v-list-item title="PCGS Details">
-            <a :href="certificateDetails.CoinFactsLink">{{ certificateDetails.CoinFactsLink }}</a>
-          </v-list-item>
-          <v-list-item title="Images" v-if="certificateDetails.Images.length">
-            <img v-for="url in certificateDetails.Images" :src="url" alt="coin image" />
-          </v-list-item>
-          <v-list-item title="PCGS Notes">
-            <div v-html="certificateDetails.CoinFactsNotes" />
-          </v-list-item>
-        </v-list>
-      </v-card>
+      <CoinDetails v-if="certificateDetails"
+        :name="certificateDetails.Name" :pcgsNo="certificateDetails.PCGSNo"
+        :certNo="certificateDetails.CertNo" :value="certificateDetails.PriceGuideValue"
+        :grade="certificateDetails.Grade" :denomination="certificateDetails.Denomination"
+        :metalContent="certificateDetails.MetalContent" :designer="certificateDetails.Designer"
+        :mintage="certificateDetails.Mintage" :diameter="certificateDetails.Diameter"
+        :edge="certificateDetails.Edge" :weight="certificateDetails.Weight"
+        :population="certificateDetails.Population" :pcgsLink="certificateDetails.CoinFactsLink"
+        :images="certificateDetails.Images" :pcgsNotes="certificateDetails.CoinFactsNotes"
+      />
     </v-card>
     <v-card class="tab" v-if="selectedTab === 'prices'" variant="tonal">
       <div v-for="cat in categories">
@@ -98,29 +83,17 @@
       <v-card v-if="loading" class="spinner">
         Fetching Data...
       </v-card>
-      <v-card variant="outlined" v-if="coinDetails" class="coin-details">
-        <v-list lines="one">
-          <v-list-item :title="coinDetails.coin_variety.description" />
-          <v-list-item :title="'Value for ' + selectedGrade[1]" :subtitle="`$${coinDetails.value}` || 'None Available'" />
-          <v-list-item title="Denomination" :subtitle="coinDetails.coin_variety.denomination" />
-          <v-list-item title="Metal Content" :subtitle="coinDetails.coin_variety.metal_content" />
-          <v-list-item title="Designer" :subtitle="coinDetails.coin_variety.designer" />
-          <v-list-item title="Mintage" :subtitle="coinDetails.coin_variety.mintage" />
-          <v-list-item title="Diameter" :subtitle="coinDetails.coin_variety.diameter" />
-          <v-list-item title="Edge" :subtitle="coinDetails.coin_variety.edge" />
-          <v-list-item title="Weight" :subtitle="coinDetails.coin_variety.weight" />
-          <v-list-item title="PCGS Population" :subtitle="coinDetails.coin_variety.population" />
-          <v-list-item title="PCGS Details">
-            <a :href="coinDetails.coin_variety.pcgs_link">{{ coinDetails.coin_variety.pcgs_link }}</a>
-          </v-list-item>
-          <v-list-item title="Images" v-if="coinDetails.coin_variety.images.length">
-            <img v-for="url in coinDetails.coin_variety.images" :src="url" alt="coin image" />
-          </v-list-item>
-          <v-list-item title="PCGS Notes">
-            <div v-html="coinDetails.coin_variety.pcgs_notes"></div>
-          </v-list-item>
-        </v-list>
-      </v-card>
+      <CoinDetails v-if="coinDetails"
+        :name="coinDetails.coin_variety.description" :pcgsNo="coinDetails.coin_variety.pcgs_id"
+        :value="coinDetails.value" :grade="selectedGrade[1]"
+        :denomination="coinDetails.coin_variety.denomination"
+        :metalContent="coinDetails.coin_variety.metal_content"
+        :designer="coinDetails.coin_variety.designer" :mintage="coinDetails.coin_variety.mintage"
+        :diameter="coinDetails.coin_variety.diameter" :edge="coinDetails.coin_variety.edge"
+        :weight="coinDetails.coin_variety.weight" :population="coinDetails.coin_variety.population"
+        :pcgsLink="coinDetails.coin_variety.pcgs_link" :images="coinDetails.coin_variety.images"
+        :pcgsNotes="coinDetails.coin_variety.pcgs_notes"
+      />
     </v-card>
   </v-container>
 </template>
