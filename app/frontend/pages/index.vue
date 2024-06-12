@@ -6,15 +6,14 @@
     <button :class="`tab ${selectedTab === 'lookup' ? 'active' : ''}`" @click="lookupTab">
       Holder Lookup
     </button>
-    <v-card v-if="selectedTab === 'lookup'" variant="tonal">
-      <h3>Certificate Lookup#</h3>
+    <v-card class="tab" v-if="selectedTab === 'lookup'" variant="tonal">
       <input type="text" name="cert_number" placeholder="Enter 8-digit PCGS #" v-model="certificateNumber" />
       <button @click="fetchCertData()" v-disabled="!certificateNumber">
         Submit
       </button>
       <v-card variant="outlined" v-if="certificateDetails" class="coin-details">
         <v-list lines="one">
-          <v-list-item :title="certificateDetails.name" />
+          <v-list-item :title="certificateDetails.Name" />
           <v-list-item title="PCGS No." :subtitle="certificateDetails.PCGSNo" />
           <v-list-item title="Cert No." :subtitle="certificateDetails.CertNo" />
           <v-list-item :title="'Value for ' + certificateDetails.Grade" :subtitle="`$${certificateDetails.PriceGuideValue}` || 'None Available'" />
@@ -27,17 +26,18 @@
           <v-list-item title="Weight" :subtitle="certificateDetails.Weight" />
           <v-list-item title="PCGS Population" :subtitle="certificateDetails.Population" />
           <v-list-item title="PCGS Details">
-            <a :href="certificateDetails.CoinFactsLink">{{ certificateDetails.pcgs_link }}</a>
+            <a :href="certificateDetails.CoinFactsLink">{{ certificateDetails.CoinFactsLink }}</a>
           </v-list-item>
           <v-list-item title="Images" v-if="certificateDetails.Images.length">
             <img v-for="url in certificateDetails.Images" :src="url" alt="coin image" />
           </v-list-item>
-          <v-list-item title="PCGS Notes" :v-html="certificateDetails.CoinFactsNotes" />
+          <v-list-item title="PCGS Notes">
+            <div v-html="certificateDetails.CoinFactsNotes" />
+          </v-list-item>
         </v-list>
       </v-card>
     </v-card>
-    <v-card v-if="selectedTab === 'prices'" variant="tonal">
-      <h3>Select Coin Details</h3>
+    <v-card class="tab" v-if="selectedTab === 'prices'" variant="tonal">
       <div v-for="cat in categories">
         <button
           v-if="!selectedCategory || selectedCategory.name === cat.name"
@@ -71,13 +71,21 @@
         </div>
       </div>
       <v-row v-if="selectedCoin" class="coin-grades">
+        <button
+          class="category active"
+          v-if="selectedGrade"
+          @click="clearGrade()"
+        >
+          {{ selectedGrade[1] }}
+          <span>X</span>
+        </button>
         <v-col :cols="selectedGrade ? 12 : 3"
           v-for="grade in (selectedCoin.mint_type == 'PR' ? availableProofGrades : availableGrades)"
-          v-if="!selectedGrade || (grade && selectedGrade[0] === grade[0])"
+          v-if="!selectedGrade"
         >
           <button
-            :class="`category coin-grade ${selectedGrade && selectedGrade[0] === grade[0] ? 'active' : ''}`"
-            @click="selectedGrade ? clearGrade() : selectGrade(grade)"
+            class="category coin-grade"
+            @click="selectGrade(grade)"
           >
             {{ grade[1] }}
             <span v-if="selectedGrade">X</span>
@@ -102,7 +110,9 @@
           <v-list-item title="Images" v-if="coinDetails.coin_variety.images.length">
             <img v-for="url in coinDetails.coin_variety.images" :src="url" alt="coin image" />
           </v-list-item>
-          <v-list-item title="PCGS Notes" :v-html="coinDetails.coin_variety.pcgs_notes" />
+          <v-list-item title="PCGS Notes">
+            <div v-html="coinDetails.coin_variety.pcgs_notes"></div>
+          </v-list-item>
         </v-list>
       </v-card>
     </v-card>
@@ -156,8 +166,8 @@
         this.fetchCoins(series.id);
       },
       clearSeries() {
-        this.clearCoin();
         this.selectedSeries = null;
+        this.clearCoin();
       },
       fetchCoins(id) {
         axios.get(`/coin_varieties/?series_id=${id}`).then(
@@ -170,6 +180,7 @@
         this.selectedCoin = null;
         this.coinVarieties = null;
         this.clearGrade();
+        if (this.selectedSeries) this.fetchCoins();
       },
       selectGrade(grade) {
         this.selectedGrade = grade;
@@ -195,7 +206,4 @@
 
 </script>
 <style>
-  h1 {
-    color: blue;
-  }
 </style>

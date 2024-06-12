@@ -85,6 +85,12 @@ button.category {
 .coin-details {
   width: 300px;
   margin: auto;
+  margin-top: 15px;
+}
+
+div.tab {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 button.tab {

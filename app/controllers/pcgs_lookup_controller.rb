@@ -3,9 +3,7 @@ class PcgsLookupController < ApplicationController
     @cert_no = params[:cert_no]
     resp = fetch_data
 
-    respond_to do
-      format.json { resp }
-    end
+    render json: resp
   end
 
   private
