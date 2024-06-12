@@ -11,15 +11,15 @@ class CreateCoinVarieties < ActiveRecord::Migration[7.1]
       t.float :diameter
       t.string :edge
       t.float :weight
-      t.string :grade
       t.string :designation
-      t.float :price_value
       t.integer :population
       t.string :pcgs_link
       t.string :designer
       t.text :pcgs_notes
-      t.string :series_name
+      t.integer :mint_type, default: 0, null: false
+      t.json :images
 
+      t.references :series
       t.timestamps
     end
   end

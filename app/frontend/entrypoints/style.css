@@ -51,7 +51,7 @@ h1 {
 
 button.category {
   margin: auto;
-  width: 200px;
+  width: 250px;
   display: block;
   border-radius: 4px;
   background-color: #55558b;
@@ -60,6 +60,31 @@ button.category {
     background-color: #6a6ac5;
     color: #fff;
   }
+  &.coin-grade {
+    width: 60px;
+  }
+}
+
+.coin-grades {
+  margin: auto;
+  width: 250px;
+  .v-col {
+    padding: 2px;
+    button.category { 
+      &.active {
+        width: 250px;
+      }
+    }
+  }
+}
+
+.coin-grades {
+  margin: auto !important;
+}
+
+.coin-details {
+  width: 300px;
+  margin: auto;
 }
 
 button.tab {

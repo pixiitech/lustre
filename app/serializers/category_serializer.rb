@@ -1,10 +1,5 @@
 class CategorySerializer < ApplicationSerializer
-  attribute :label do
-    object.name
-  end
-  attribute :value do
-    object.id
-  end
+  attributes :id, :name
 
   has_many :series
 end

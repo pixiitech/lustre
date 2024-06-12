@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_06_165929) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_05_205148) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -28,18 +28,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_06_165929) do
     t.float "diameter"
     t.string "edge"
     t.float "weight"
-    t.string "grade"
     t.string "designation"
-    t.float "price_value"
     t.integer "population"
     t.string "pcgs_link"
     t.string "designer"
     t.text "pcgs_notes"
-    t.string "series_name"
+    t.integer "mint_type", default: 0, null: false
+    t.json "images"
+    t.integer "series_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "series_id"
-    t.integer "mint_type", default: 0, null: false
     t.index ["series_id"], name: "index_coin_varieties_on_series_id"
   end
 
