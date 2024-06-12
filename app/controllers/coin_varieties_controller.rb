@@ -2,7 +2,7 @@ class CoinVarietiesController < ApplicationController
   def index
     @series = Series.find(params[:series_id])
 
-    render json: @series.coin_varieties.order(year: :asc)
+    render json: @series.coin_varieties.where(mint_type: params[:mint_type]).order(year: :asc)
   end
 
   def show

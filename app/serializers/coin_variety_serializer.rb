@@ -7,6 +7,10 @@ class CoinVarietySerializer < ApplicationSerializer
     :population, :pcgs_link, :designer, :pcgs_notes, :images
 
   attribute :description do
-    [object.name, (object.MS? ? nil : "(#{object.mint_type})"), object.designation].compact.join(' ')
+    [
+      object.name,
+      (object.MS? ? nil : object.mint_type),
+      (%w[MS PR SP].include?(object.designation) ? nil : object.designation)
+    ].compact.join(' ')
   end
 end

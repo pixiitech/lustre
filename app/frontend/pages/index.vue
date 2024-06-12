@@ -46,7 +46,17 @@
           <span v-if="selectedSeries">X</span>
         </button>
       </div>
-      <div v-if="selectedSeries" @load="fetchCoins()">
+      <div v-if="selectedSeries" v-for="mintType in filteredMintTypes()">
+        <button
+          v-if="!selectedMintType || selectedMintType[0] === mintType[0]"
+          :class="`category ${selectedMintType && selectedMintType[0]=== mintType[0] ? 'active' : ''}`"
+          @click="selectedMintType ? clearMintType() : selectMintType(mintType)"
+        >
+          {{ mintType[1] }}
+          <span v-if="selectedMintType">X</span>
+        </button>
+      </div>
+      <div v-if="selectedMintType">
         <div v-for="coin in coinVarieties">
           <button
             v-if="!selectedCoin || selectedCoin.id === coin.id"
@@ -68,7 +78,7 @@
           <span>X</span>
         </button>
         <v-col :cols="selectedGrade ? 12 : 3"
-          v-for="grade in (selectedCoin.mint_type == 'PR' ? availableProofGrades : availableGrades)"
+          v-for="grade in (selectedCoin.mint_type == 'MS' ? availableGrades : availableProofGrades)"
           v-if="!selectedGrade"
         >
           <button
@@ -111,6 +121,7 @@
         selectedSeries: null,
         selectedCoin: null,
         selectedGrade: null,
+        selectedMintType: null,
         coinVarieties: [],
         loading: false,
         availableGrades: [
@@ -126,8 +137,10 @@
           [65, "PR-65"], [66, "PR-66"], [67, "PR-67"], [68, "PR-68"], [69, "PR-69"],
           [70, "PR-70"],
         ],
+        mintTypes: [['MS', 'Mint State (MS)'], ['PR', 'Proof (PR)'], ['SP', 'Specimen (SP)']],
         coinDetails: null,
         certificateDetails: null,
+        certificateNumber: null,
       }
     },
     methods: {
@@ -143,15 +156,19 @@
       },
       selectSeries(series) {
         this.selectedSeries = series;
-        this.fetchCoins(series.id);
+      },
+      selectMintType(mintType) {
+        this.selectedMintType = mintType;
+        this.fetchCoins(this.selectedSeries.id, mintType[0]);
       },
       clearSeries() {
         this.selectedSeries = null;
+        this.selectedMintType = null;
         this.clearCoin();
       },
-      fetchCoins(id) {
+      fetchCoins(id, mintType) {
         this.loading = true;
-        axios.get(`/coin_varieties/?series_id=${id}`).then(
+        axios.get(`/coin_varieties/?series_id=${id}&mint_type=${mintType}`).then(
           (response) => {
             this.loading = false;
             this.coinVarieties = response.data;
@@ -162,7 +179,17 @@
         this.selectedCoin = null;
         this.coinVarieties = null;
         this.clearGrade();
-        if (this.selectedSeries) this.fetchCoins();
+        if (this.selectedSeries && this.selectedMintType) {
+          this.fetchCoins(this.selectedSeries.id, this.selectedMintType[0]);
+        }
+      },
+      filteredMintTypes() {
+        return this.mintTypes.filter(
+          mintType => (this.selectedSeries.mint_types.includes(mintType[0])));
+      },
+      clearMintType() {
+        this.selectedMintType = null;
+        this.clearCoin();
       },
       selectGrade(grade) {
         this.selectedGrade = grade;

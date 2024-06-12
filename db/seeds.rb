@@ -14,6 +14,7 @@ CSV.foreach("lib/assets/series.csv").each do |line|
 end
 
 Dir.entries('lib/assets/coins').select { |f| f.match?(/\.csv$/) }.each do |file_name|
+  puts file_name
   CSV.foreach("lib/assets/coins/#{file_name}", headers: true).each do |line|
     begin
     series = Series.find_by(name: line['series'])
