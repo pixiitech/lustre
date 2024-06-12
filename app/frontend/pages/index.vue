@@ -11,6 +11,9 @@
       <button @click="fetchCertData()" v-disabled="!certificateNumber">
         Submit
       </button>
+      <v-card variant="outlined" v-if="loading" class="spinner">
+        Fetching Data...
+      </v-card>
       <v-card variant="outlined" v-if="certificateDetails" class="coin-details">
         <v-list lines="one">
           <v-list-item :title="certificateDetails.Name" />
@@ -92,6 +95,9 @@
           </button>
         </v-col>
       </v-row>
+      <v-card v-if="loading" class="spinner">
+        Fetching Data...
+      </v-card>
       <v-card variant="outlined" v-if="coinDetails" class="coin-details">
         <v-list lines="one">
           <v-list-item :title="coinDetails.coin_variety.description" />
@@ -133,6 +139,7 @@
         selectedCoin: null,
         selectedGrade: null,
         coinVarieties: [],
+        loading: false,
         availableGrades: [
           [1, "PO-1"], [2, "FR-2"], [3, "AG-3"], [4, "G-4"], [6, "G-6"], [8, "VG-8"],
           [10, "VG-10"], [12, "F-12"], [15, "F-15"], [20, "VF-20"], [25, "VF-25"],
@@ -170,8 +177,10 @@
         this.clearCoin();
       },
       fetchCoins(id) {
+        this.loading = true;
         axios.get(`/coin_varieties/?series_id=${id}`).then(
           (response) => {
+            this.loading = false;
             this.coinVarieties = response.data;
           }
         );
@@ -184,8 +193,10 @@
       },
       selectGrade(grade) {
         this.selectedGrade = grade;
+        this.loading = true;
         axios.get(`/coin_varieties/${this.selectedCoin.id}?grade=${grade[0]}`).then(
           (response) => {
+            this.loading = false;
             this.coinDetails = response.data;
           }
         );
@@ -195,8 +206,10 @@
         this.coinDetails = null;
       },
       fetchCertData() {
+        this.loading = true;
         axios.get(`/pcgs_lookup?cert_no=${this.certificateNumber}`).then(
           (response) => {
+            this.loading = false;
             this.certificateDetails = response.data;
           }
         );

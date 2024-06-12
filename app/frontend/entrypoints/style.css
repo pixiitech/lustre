@@ -65,6 +65,13 @@ button.category {
   }
 }
 
+.spinner {
+  width: 250px;
+  margin: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
 .coin-grades {
   margin: auto;
   width: 250px;

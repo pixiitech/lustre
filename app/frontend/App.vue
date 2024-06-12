@@ -1,7 +1,7 @@
 <template>
   <v-app id="vuetify-app">
     <v-main>
-      <p>Vuetify 3 App Running 🍾🎉</p>
+      <p>Lustre - Fast PCGS Pricing</p>
       <slot></slot>
     </v-main>
   </v-app>
