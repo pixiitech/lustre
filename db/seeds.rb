@@ -8,8 +8,8 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+puts "Importing series listing..."
 CSV.foreach("lib/assets/series.csv").each do |line|
-  puts "Importing series listing..."
   category = Category.find_or_create_by(name: line[0])
   series = Series.find_or_create_by(category_id: category.id, name: line[1])
   series.update(photo_url: line[2])
