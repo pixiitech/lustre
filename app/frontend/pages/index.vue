@@ -22,7 +22,7 @@
         :mintage="certificateDetails.Mintage" :diameter="certificateDetails.Diameter"
         :edge="certificateDetails.Edge" :weight="certificateDetails.Weight"
         :population="certificateDetails.Population" :pcgsLink="certificateDetails.CoinFactsLink"
-        :images="certificateDetails.Images" :pcgsNotes="certificateDetails.CoinFactsNotes"
+        :imageUrl="1" :pcgsNotes="certificateDetails.CoinFactsNotes"
       />
     </v-card>
     <v-card class="tab" v-if="selectedTab === 'prices'" variant="tonal">
@@ -101,7 +101,7 @@
         :designer="coinDetails.coin_variety.designer" :mintage="coinDetails.coin_variety.mintage"
         :diameter="coinDetails.coin_variety.diameter" :edge="coinDetails.coin_variety.edge"
         :weight="coinDetails.coin_variety.weight" :population="coinDetails.coin_variety.population"
-        :pcgsLink="coinDetails.coin_variety.pcgs_link" :images="coinDetails.coin_variety.images"
+        :pcgsLink="coinDetails.coin_variety.pcgs_link" :imageUrl="selectedSeries.photo_url"
         :pcgsNotes="coinDetails.coin_variety.pcgs_notes"
       />
     </v-card>

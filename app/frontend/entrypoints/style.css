@@ -93,6 +93,13 @@ button.category {
   width: 300px;
   margin: auto;
   margin-top: 15px;
+  .image-disclaimer {
+    font-size: 10px;
+    color: #424242;
+  }
+  .coin-image {
+    width: 100%;
+  }
 }
 
 div.tab {

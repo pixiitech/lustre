@@ -16,8 +16,12 @@
       <v-list-item title="PCGS Details">
         <a :href="pcgsLink">{{ pcgsLink }}</a>
       </v-list-item>
-      <v-list-item title="Images" v-if="images.length">
-        <img v-for="url in images" :src="url" alt="coin image" />
+      <v-list-item title="Images" v-if="imageUrl">
+        <span class="image-disclaimer">
+          Images attempt to show matching grade in MS, but may reflect any date/variation in the coin series
+        </span>
+        <img class="coin-image" :src="imageUrl.replace(/\${3}/, `${grade.match(/\d{2}/)[0]}o`)" alt="coin obverse" />
+        <img class="coin-image" :src="imageUrl.replace(/\${3}/, `${grade.match(/\d{2}/)[0]}r`)" alt="coin reverse" />
       </v-list-item>
       <v-list-item title="PCGS Notes">
         <div v-html="pcgsNotes" />
@@ -42,7 +46,7 @@
       weight: { type: Number, required: false },
       population: { type: Number, required: false },
       pcgsLink: { type: String, required: true },
-      images: { type: Array, required: false },
+      imageUrl: { type: String, required: false },
       pcgsNotes: { type: String, required: true },
     },
   }
