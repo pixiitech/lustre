@@ -3,10 +3,8 @@
 Lustre is a Ruby on Rails/Vue.js single-page application for fetching
 rare and antique coin prices and descriptions from PCGS's API.
 
-<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-1.png" width="300" height="450" alt="Price Guide Categories" />
-<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-2.png" width="300" height="450" alt="Price Guide Result" />
-<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/price-guide-screenshot-3.png" width="300" height="450" alt="Price Guide Result 2" />
-<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/holder-lookup-screenshot-1.png" width="300" height="450" alt="PCGS Holder Lookup" />
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/lustre-screenshot-1.png" width="600" height="450" alt="Price Guide Categories" />
+<img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/lustre-screenshot-2.png" width="600" height="450" alt="Price Guide Result" />
 
 * System dependencies
     - Ruby 3.3.1
