@@ -9,9 +9,11 @@ class PcgsLookupController < ApplicationController
   private
 
   def fetch_data
-    HTTParty.get(
+    data = HTTParty.get(
       "#{ENV.fetch("PCGS_URL")}GetCoinFactsByCertNo/#{@cert_no}?retrieveAllData=true",
       headers: { Authorization: "Bearer #{ENV.fetch("PCGS_API_TOKEN")}"}
     )
+    coin_variety = CoinVariety.find_by(pcgs_id: data['PCGSNo'])
+    data.merge(image_url_template: coin_variety&.series&.photo_url)
   end
 end

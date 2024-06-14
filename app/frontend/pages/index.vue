@@ -22,7 +22,7 @@
         :mintage="certificateDetails.Mintage" :diameter="certificateDetails.Diameter"
         :edge="certificateDetails.Edge" :weight="certificateDetails.Weight"
         :population="certificateDetails.Population" :pcgsLink="certificateDetails.CoinFactsLink"
-        :imageUrl="1" :pcgsNotes="certificateDetails.CoinFactsNotes"
+        :imageUrlTemplate="certificateDetails.image_url_template" :pcgsNotes="certificateDetails.CoinFactsNotes"
       />
     </v-card>
     <v-card class="tab" v-if="selectedTab === 'prices'" variant="tonal">
@@ -56,19 +56,18 @@
           <span v-if="selectedMintType">X</span>
         </button>
       </div>
-      <div v-if="selectedMintType">
-        <div v-for="coin in coinVarieties">
-          <button
-            v-if="!selectedCoin || selectedCoin.id === coin.id"
-            :class="`category ${selectedCoin && selectedCoin.id === coin.id ? 'active' : ''}`"
-            @click="selectedCoin ? clearCoin() : selectedCoin = coin"
-          >
+      <button class="category active" v-if="selectedCoin" @click="clearCoin()">
+        {{ selectedCoin.description }}
+        <span>X</span>
+      </button>
+      <v-row v-if="selectedMintType && !selectedCoin" class="coin-varieties" no-gutters>
+        <v-col lg="4" md="6" cols="12" v-for="coin in coinVarieties">
+          <button class="category" @click="selectedCoin = coin">
             {{ coin.description }}
-            <span v-if="selectedCoin">X</span>
           </button>
-        </div>
-      </div>
-      <v-row v-if="selectedCoin" class="coin-grades">
+        </v-col>
+      </v-row>
+      <v-row v-if="selectedCoin" class="coin-grades" no-gutters>
         <button
           class="category active"
           v-if="selectedGrade"
@@ -101,7 +100,7 @@
         :designer="coinDetails.coin_variety.designer" :mintage="coinDetails.coin_variety.mintage"
         :diameter="coinDetails.coin_variety.diameter" :edge="coinDetails.coin_variety.edge"
         :weight="coinDetails.coin_variety.weight" :population="coinDetails.coin_variety.population"
-        :pcgsLink="coinDetails.coin_variety.pcgs_link" :imageUrl="selectedSeries.photo_url"
+        :pcgsLink="coinDetails.coin_variety.pcgs_link" :imageUrlTemplate="selectedSeries.photo_url"
         :pcgsNotes="coinDetails.coin_variety.pcgs_notes"
       />
     </v-card>
