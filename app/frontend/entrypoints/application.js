@@ -1,10 +1,10 @@
 import { createApp, defineAsyncComponent } from "vue";
-import vuetify from "~/plugins/vuetify";
+import vuetify from "../plugins/vuetify";
 import './style.css';
 
-import App from '~/app'
-const PagesIndex = defineAsyncComponent(() => import("~/pages/index"));
-const CoinDetails = defineAsyncComponent(() => import("~/components/coinDetails"));
+import App from '../app'
+const PagesIndex = defineAsyncComponent(() => import("../pages/index"));
+const CoinDetails = defineAsyncComponent(() => import("../components/coinDetails"));
 
 const app = createApp({});
 
