@@ -1,2 +1,2 @@
-web: bin/rails server --port=3000
+web: bin/rails server
 vite: bin/vite
