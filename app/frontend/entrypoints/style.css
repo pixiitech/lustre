@@ -35,15 +35,13 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  /* min-width: 320px; */
   min-height: 100vh;
 }
 
 .lustre-container {
-  /* min-width: 440px; */
   padding: 10px 20px 10px 20px;
 }
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -104,6 +102,7 @@ button.category {
   width: 90%;
   margin: auto;
   margin-top: 15px;
+  padding: 10px !important;
   .image-disclaimer {
     font-size: 10px;
     color: #424242;
@@ -119,6 +118,7 @@ button.category {
 }
 
 div.tab {
+  margin-top: 10px;
   padding-top: 15px;
   padding-bottom: 15px;
 }
