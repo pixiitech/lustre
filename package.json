@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "dev": "bunx --bun vite",
-    "build": "bunx --bun vite build"
+    "start": "serve -s build",
+    "build": "vite build"
   },
   "devDependencies": {
     "sass": "^1.77.5",
@@ -21,9 +21,5 @@
   "engines": {
     "npm": "=10.7.0",
     "node": "=22.2.0"
-  },
-  "scripts": {
-    "start": "serve -s build",
-    "build": "vite build"
   }
 }
