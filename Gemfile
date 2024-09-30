@@ -59,3 +59,7 @@ end
 
 
 gem "vite_rails", "~> 3.0"
+
+group :production do
+  gem "pg", "~> 1.5"
+end
