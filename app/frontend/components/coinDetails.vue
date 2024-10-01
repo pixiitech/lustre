@@ -14,7 +14,12 @@
         <div class="heading">
           {{ 'Value for ' + grade }}
         </div>
-        ${{ value }}
+        <span v-if="value && value > 0">
+          ${{ value }}
+        </span>
+        <span v-if="!value">
+          --
+        </span>
       </v-col>
       <v-col lg="3" md="6" cols="12">
         <div class="heading">Denomination</div>
@@ -48,7 +53,7 @@
         <div class="heading">Population in PCGS</div>
         {{ population }}
       </v-col>
-      <v-col cols="12">
+      <v-col cols="12" v-if="pcgsLink">
         <div class="heading">Link</div>
         <a :href="pcgsLink">{{ pcgsLink }}</a>
       </v-col>

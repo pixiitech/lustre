@@ -213,6 +213,15 @@
           }
         );
       },
+      search() {
+        this.loading = true;
+        axios.get(`/search?query=${this.searchField}`).then(
+          (response) => {
+            this.loading = false;
+            this.coinVarieties = response.data;
+          }
+        );
+      },
     }
   }
 

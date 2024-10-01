@@ -23,9 +23,9 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: <%= URI.parse(ENV.fetch("DATABASE_URL")).path[1..-1] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= URI.parse(ENV.fetch("DATABASE_URL")).user %>
-  password: <%= URI.parse(ENV.fetch("DATABASE_URL")).password %>
-  host: <%= URI.parse(ENV.fetch("DATABASE_URL")).host %>
-  port: <%= URI.parse(ENV.fetch("DATABASE_URL")).port %>
+  database: <%= URI.parse(ENV.fetch("DATABASE_URL", "")).path[1..-1] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", nil) { 5 } %>
+  username: <%= URI.parse(ENV.fetch("DATABASE_URL", "")).user %>
+  password: <%= URI.parse(ENV.fetch("DATABASE_URL", "")).password %>
+  host: <%= URI.parse(ENV.fetch("DATABASE_URL", "")).host %>
+  port: <%= URI.parse(ENV.fetch("DATABASE_URL", "")).port %>
