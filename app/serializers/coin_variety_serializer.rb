@@ -4,7 +4,11 @@ class CoinVarietySerializer < ApplicationSerializer
 
   # Fetched data
   attributes :denomination, :mintage, :metal_content, :diameter, :edge, :weight,
-    :population, :pcgs_link, :designer, :pcgs_notes, :images
+    :population, :designer, :pcgs_notes, :images
+
+  attribute :pcgs_link do
+    object.pcgs_link ? "https://#{object.pcgs_link}" : nil
+  end
 
   attribute :description do
     [
