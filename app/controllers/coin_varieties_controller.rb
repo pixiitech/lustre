@@ -2,7 +2,17 @@ class CoinVarietiesController < ApplicationController
   def index
     @series = Series.find(params[:series_id])
 
-    render json: @series.coin_varieties.where(mint_type: params[:mint_type]).order(year: :asc)
+    data = @series.coin_varieties.where(mint_type: params[:mint_type]).order(year: :asc).map do |coin|
+      ActiveModelSerializers::SerializableResource.new(coin).as_json
+    end
+    render json: data
+  end
+
+  def search
+    data = CoinVariety.search(params['query'], fields: [:search_terms]).map do |coin|
+      ActiveModelSerializers::SerializableResource.new(coin).as_json
+    end
+    render json: data
   end
 
   def show

@@ -1,9 +1,12 @@
 <template>
   <v-container className="lustre-container">
-    <button :class="`tab ${selectedTab === 'prices' ? 'active' : ''}`" @click="priceTab">
+    <button :class="`tab ${selectedTab === 'prices' ? 'active' : ''}`" @click="() => clickTab('prices')">
       Price Guide
     </button>
-    <button :class="`tab ${selectedTab === 'lookup' ? 'active' : ''}`" @click="lookupTab">
+    <button :class="`tab ${selectedTab === 'search' ? 'active' : ''}`" @click="() => clickTab('search')">
+      Coin Search
+    </button>
+    <button :class="`tab ${selectedTab === 'lookup' ? 'active' : ''}`" @click="() => clickTab('lookup')">
       Holder Lookup
     </button>
     <v-card class="tab" v-if="selectedTab === 'lookup'" variant="tonal">
@@ -25,45 +28,56 @@
         :imageUrlTemplate="certificateDetails.image_url_template" :pcgsNotes="certificateDetails.CoinFactsNotes"
       />
     </v-card>
-    <v-card class="tab" v-if="selectedTab === 'prices'" variant="tonal">
-      <div v-for="cat in categories">
-        <button
-          v-if="!selectedCategory || selectedCategory.name === cat.name"
-          :class="`category ${selectedCategory && selectedCategory.name === cat.name ? 'active' : ''}`"
-          @click="selectedCategory ? clearCategory() : selectCategory(cat)"
-        >
-          {{ cat.name }}
-          <span v-if="selectedCategory">X</span>
+    <v-card class="tab" v-if="selectedTab === 'prices' || selectedTab === 'search'" variant="tonal">
+      <div v-if="selectedTab === 'search'">
+        <input type="text" name="search" placeholder="Search coin type, year, etc" v-model="searchField" />
+        <button @click="search()" :disabled="!searchField || searchField.length < 4">
+          Search
         </button>
+        <div v-if="searched && coinVarieties.length == 0" class='no-results'>
+          Sorry, no results found.
+        </div>
       </div>
-      <div v-if="selectedCategory" v-for="series in selectedCategory.series">
-        <button
-          v-if="!selectedSeries || selectedSeries.name === series.name"
-          :class="`category ${selectedSeries && selectedSeries.name === series.name ? 'active' : ''}`"
-          @click="selectedSeries ? clearSeries() : selectSeries(series)"
-        >
-          {{ series.name }}
-          <span v-if="selectedSeries">X</span>
-        </button>
-      </div>
-      <div v-if="selectedSeries" v-for="mintType in filteredMintTypes()">
-        <button
-          v-if="!selectedMintType || selectedMintType[0] === mintType[0]"
-          :class="`category ${selectedMintType && selectedMintType[0]=== mintType[0] ? 'active' : ''}`"
-          @click="selectedMintType ? clearMintType() : selectMintType(mintType)"
-        >
-          {{ mintType[1] }}
-          <span v-if="selectedMintType">X</span>
-        </button>
+      <div v-if="selectedTab === 'prices'">
+        <div v-for="cat in categories">
+          <button
+            v-if="!selectedCategory || selectedCategory.name === cat.name"
+            :class="`category ${selectedCategory && selectedCategory.name === cat.name ? 'active' : ''}`"
+            @click="selectedCategory ? clearCategory() : selectCategory(cat)"
+          >
+            {{ cat.name }}
+            <span v-if="selectedCategory">X</span>
+          </button>
+        </div>
+        <div v-if="selectedCategory" v-for="series in selectedCategory.series">
+          <button
+            v-if="!selectedSeries || selectedSeries.name === series.name"
+            :class="`category ${selectedSeries && selectedSeries.name === series.name ? 'active' : ''}`"
+            @click="selectedSeries ? clearSeries() : selectSeries(series)"
+          >
+            {{ series.name }}
+            <span v-if="selectedSeries">X</span>
+          </button>
+        </div>
+        <div v-if="selectedSeries" v-for="mintType in filteredMintTypes()">
+          <button
+            v-if="!selectedMintType || selectedMintType[0] === mintType[0]"
+            :class="`category ${selectedMintType && selectedMintType[0]=== mintType[0] ? 'active' : ''}`"
+            @click="selectedMintType ? clearMintType() : selectMintType(mintType)"
+          >
+            {{ mintType[1] }}
+            <span v-if="selectedMintType">X</span>
+          </button>
+        </div>
       </div>
       <button class="category active" v-if="selectedCoin" @click="clearCoin()">
-        {{ selectedCoin.description }}
+        {{ selectedTab === 'prices' ? selectedCoin.description : selectedCoin.full_description }}
         <span>X</span>
       </button>
-      <v-row v-if="selectedMintType && !selectedCoin" class="coin-varieties" no-gutters>
+      <v-row v-if="(selectedTab == 'search' || selectedMintType) && !selectedCoin" class="coin-varieties" no-gutters>
         <v-col lg="4" md="6" cols="12" v-for="coin in coinVarieties">
           <button class="category" @click="selectedCoin = coin">
-            {{ coin.description }}
+            {{ selectedTab === 'prices' ? coin.description : coin.full_description }}
           </button>
         </v-col>
       </v-row>
@@ -100,7 +114,8 @@
         :designer="coinDetails.coin_variety.designer" :mintage="coinDetails.coin_variety.mintage"
         :diameter="coinDetails.coin_variety.diameter" :edge="coinDetails.coin_variety.edge"
         :weight="coinDetails.coin_variety.weight" :population="coinDetails.coin_variety.population"
-        :pcgsLink="coinDetails.coin_variety.pcgs_link" :imageUrlTemplate="selectedSeries.photo_url"
+        :pcgsLink="coinDetails.coin_variety.pcgs_link"
+        :imageUrlTemplate="coinDetails.coin_variety.image_url_template"
         :pcgsNotes="coinDetails.coin_variety.pcgs_notes"
       />
     </v-card>
@@ -149,12 +164,14 @@
         selectedMintType: initialMintType,
         coinVarieties: [],
         loading: false,
+        searched: false,
         availableGrades: availableGrades,
         availableProofGrades: availableProofGrades,
         mintTypes: mintTypes,
         coinDetails: null,
         certificateDetails: null,
         certificateNumber: null,
+        searchField: null,
       }
     },
     mounted() {
@@ -163,16 +180,17 @@
       }
     },
     methods: {
-      lookupTab() {
-        this.selectedTab = "lookup";
-      },
-      priceTab() {
-        this.selectedTab = "prices";
+      clickTab(name) {
+        this.clearCategory();
+        this.searched = false;
+        this.selectedTab = name;
       },
       updateUrl() {
         let qString = "";
         let title = "";
-        if (this.selectedCategory) { 
+        if (this.searchField) {
+          qString = `?search=${this.searchField}`;
+        } else if (this.selectedCategory) { 
           qString = `?category=${this.selectedCategory.id}`;
           title = this.selectedCategory.name;
         }
@@ -185,7 +203,11 @@
         }
         if (this.selectedCoin) {
           qString = `${qString}&coin=${this.selectedCoin.id}`;
-          title = `${this.selectedCoin.name} ${this.selectedSeries.name}`;
+          if (this.selectedTab === 'prices') {
+            title = `${this.selectedCoin.name} ${this.selectedSeries.name}`;
+          } else {
+            title = this.selectedCoin.full_description;
+          }
         }
         if (this.selectedGrade) {
           qString = `${qString}&grade=${this.selectedGrade[0]}`;
@@ -227,7 +249,9 @@
       },
       clearCoin() {
         this.selectedCoin = null;
-        this.coinVarieties = null;
+        this.coinVarieties = [];
+        this.searchField = null;
+        this.searched = false;
         this.clearGrade();
         if (this.selectedSeries && this.selectedMintType) {
           this.fetchCoins(this.selectedSeries.id, this.selectedMintType[0]);
@@ -271,9 +295,10 @@
       },
       search() {
         this.loading = true;
-        axios.get(`/search?query=${this.searchField}`).then(
+        axios.get(`/coin_varieties/search?query=${this.searchField}`).then(
           (response) => {
             this.loading = false;
+            this.searched = true;
             this.coinVarieties = response.data;
           }
         );

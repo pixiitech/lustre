@@ -43,3 +43,4 @@ node_modules
 *.local
 *.swp
 *.DS_Store
+elasticsearch

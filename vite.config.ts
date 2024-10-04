@@ -26,4 +26,7 @@ export default defineConfig({
   },
   appType: "mpa",
   clearScreen: false,
+  build: {
+    minify: false,
+  },
 });

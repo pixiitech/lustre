@@ -1,2 +1,3 @@
 web: env RUBY_DEBUG_OPEN=true bin/rails server --port=3000
-js: serve -s dist
+elastic: elasticsearch/bin/elasticsearch
+js: vite build; node_modules/.bin/serve -s develop

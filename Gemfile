@@ -39,6 +39,8 @@ gem "csv"
 gem "active_model_serializers"
 gem "httparty"
 gem "figaro"
+gem "elasticsearch", "= 7.10.1"
+gem "searchkick"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

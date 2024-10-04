@@ -17,4 +17,16 @@ class CoinVarietySerializer < ApplicationSerializer
       (%w[MS PR SP].include?(object.designation) ? nil : object.designation)
     ].compact.join(' ')
   end
+
+  attribute :full_description do
+    [
+      object.series.plain_title,
+      object.name,
+      object.designation,
+    ].compact.join(' - ')
+  end
+
+  attribute :image_url_template do
+    object.series.photo_url
+  end
 end

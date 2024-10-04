@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
-  get 'blogs/index'
-  get 'blogs/show'
+  resources :coin_varieties, only: %i[show index] do
+    collection do
+      get :search
+    end
+  end
 
-  resources :blogs
-  resources :coin_varieties, only: %i[show index]
   resources :pcgs_lookup, only: :index
 
   # Defines the root path route ("/")
