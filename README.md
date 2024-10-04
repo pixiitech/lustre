@@ -6,6 +6,8 @@ rare and antique coin prices and descriptions from PCGS's API.
 <img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/lustre-screenshot-1.png" width="600" height="450" alt="Price Guide Categories" />
 <img src="https://github.com/pixiitech/lustre/blob/main/lib/assets/readme/lustre-screenshot-2.png" width="600" height="450" alt="Price Guide Result" />
 
+Live demo is at https://lustre.pixiitech.net
+
 * System dependencies
     - Ruby 3.3.1
     - bun package manager
