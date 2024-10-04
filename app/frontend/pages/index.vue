@@ -118,6 +118,10 @@
         :imageUrlTemplate="coinDetails.coin_variety.image_url_template"
         :pcgsNotes="coinDetails.coin_variety.pcgs_notes"
       />
+      <div class="elastic-badge" v-if="selectedTab === 'search'">
+        Powered by
+        <img width=100 height=31 src="../../assets/images/elastic.png" alt="Powered by Elasticsearch" />
+      </div>
     </v-card>
   </v-container>
 </template>

@@ -16,7 +16,7 @@ Live demo is at https://lustre.pixiitech.net
     - PCGS API key (one can be obtained by creating a free account on pcgs.com)
     - SQLite 3.46
     - Install foreman (not mandatory, but allows running both processes in the same window)
-    - Elasticsearch 7.10, installed to ./elasticsearch
+    - Elasticsearch 7.10, installed to ./elasticsearch in the repo dir
     - foreman (optional)
 
 * Configuration
@@ -31,6 +31,9 @@ Live demo is at https://lustre.pixiitech.net
 * Database initialization
     - rake db:migrate
     - rake db:seed (this will populate known PCGS data from lib/assets/coins)
+
+* Index data
+    - In rails console: `CoinVariety.reindex`
 
 * Running app
     - foreman start -f Procfile.dev
