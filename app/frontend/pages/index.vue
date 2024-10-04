@@ -30,7 +30,7 @@
         <button
           v-if="!selectedCategory || selectedCategory.name === cat.name"
           :class="`category ${selectedCategory && selectedCategory.name === cat.name ? 'active' : ''}`"
-          @click="selectedCategory ? clearCategory() : selectedCategory = cat"
+          @click="selectedCategory ? clearCategory() : selectCategory(cat)"
         >
           {{ cat.name }}
           <span v-if="selectedCategory">X</span>
@@ -112,34 +112,54 @@
   export default {
     props: {
       categories: { type: Array, required: true },
+      initialCategory: { type: Object, required: false },
+      initialSeries: { type: Object, required: false },
+      initialCoin: { type: Object, required: false },
+      initialMintType: { type: String, required: false },
+      initialGrade: { type: Number, required: false },
     },
     data(props) {
+      let mintTypes = [['MS', 'Mint State (MS)'], ['PR', 'Proof (PR)'], ['SP', 'Specimen (SP)']];
+      let availableGrades = [
+        [1, "PO-1"], [2, "FR-2"], [3, "AG-3"], [4, "G-4"], [6, "G-6"], [8, "VG-8"],
+        [10, "VG-10"], [12, "F-12"], [15, "F-15"], [20, "VF-20"], [25, "VF-25"],
+        [30, "VF-30"], [35, "VF-35"], [40, "XF-40"], [45, "XF-45"], [50, "AU-50"],
+        [53, "AU-53"], [55, "AU-55"], [58, "AU-58"], [60, "MS-60"], [61, "MS-61"],
+        [62, "MS-62"], [63, "MS-63"], [64, "MS-64"], [65, "MS-65"], [66, "MS-66"],
+        [67, "MS-67"], [68, "MS-68"], [69, "MS-69"], [70, "MS-70"],
+      ];
+      let availableProofGrades = [
+        [60, "PR-60"], [61, "PR-61"], [62, "PR-62"], [63, "PR-63"], [64, "PR-64"],
+        [65, "PR-65"], [66, "PR-66"], [67, "PR-67"], [68, "PR-68"], [69, "PR-69"],
+        [70, "PR-70"],
+      ];
+      let initialMintType = mintTypes.find(mintType => (mintType[0] == this.initialMintType));
+      let initialGrade = null;
+      if (this.initialMintType == 'MS' && this.initialGrade) {
+        initialGrade = availableGrades.find(grade => (grade[0] == this.initialGrade));
+      } else if (this.initialMintType && this.initialGrade) {
+        initialGrade = availableProofGrades.find(grade => (grade[0] == this.initialGrade));
+      }
       return {
         selectedTab: "prices",
-        selectedCategory: null,
-        selectedSeries: null,
-        selectedCoin: null,
-        selectedGrade: null,
-        selectedMintType: null,
+        selectedCategory: this.initialCategory,
+        selectedSeries: this.initialSeries,
+        selectedCoin: this.initialCoin,
+        selectedGrade: initialGrade,
+        selectedMintType: initialMintType,
         coinVarieties: [],
         loading: false,
-        availableGrades: [
-          [1, "PO-1"], [2, "FR-2"], [3, "AG-3"], [4, "G-4"], [6, "G-6"], [8, "VG-8"],
-          [10, "VG-10"], [12, "F-12"], [15, "F-15"], [20, "VF-20"], [25, "VF-25"],
-          [30, "VF-30"], [35, "VF-35"], [40, "XF-40"], [45, "XF-45"], [50, "AU-50"],
-          [53, "AU-53"], [55, "AU-55"], [58, "AU-58"], [60, "MS-60"], [61, "MS-61"],
-          [62, "MS-62"], [63, "MS-63"], [64, "MS-64"], [65, "MS-65"], [66, "MS-66"],
-          [67, "MS-67"], [68, "MS-68"], [69, "MS-69"], [70, "MS-70"],
-        ],
-        availableProofGrades: [
-          [60, "PR-60"], [61, "PR-61"], [62, "PR-62"], [63, "PR-63"], [64, "PR-64"],
-          [65, "PR-65"], [66, "PR-66"], [67, "PR-67"], [68, "PR-68"], [69, "PR-69"],
-          [70, "PR-70"],
-        ],
-        mintTypes: [['MS', 'Mint State (MS)'], ['PR', 'Proof (PR)'], ['SP', 'Specimen (SP)']],
+        availableGrades: availableGrades,
+        availableProofGrades: availableProofGrades,
+        mintTypes: mintTypes,
         coinDetails: null,
         certificateDetails: null,
         certificateNumber: null,
+      }
+    },
+    mounted() {
+      if (this.selectedGrade) {
+        this.selectGrade(this.selectedGrade);
       }
     },
     methods: {
@@ -149,21 +169,52 @@
       priceTab() {
         this.selectedTab = "prices";
       },
+      updateUrl() {
+        let qString = "";
+        let title = "";
+        if (this.selectedCategory) { 
+          qString = `?category=${this.selectedCategory.id}`;
+          title = this.selectedCategory.name;
+        }
+        if (this.selectedSeries) {
+          qString = `${qString}&series=${this.selectedSeries.id}`;
+          title = this.selectedSeries.name;
+        }
+        if (this.selectedMintType) {
+          qString = `${qString}&mint_type=${this.selectedMintType[0]}`;
+        }
+        if (this.selectedCoin) {
+          qString = `${qString}&coin=${this.selectedCoin.id}`;
+          title = `${this.selectedCoin.name} ${this.selectedSeries.name}`;
+        }
+        if (this.selectedGrade) {
+          qString = `${qString}&grade=${this.selectedGrade[0]}`;
+        }
+        window.history.pushState("", title, qString || '/');
+      },
+      selectCategory(cat) {
+        this.selectedCategory = cat;
+        this.updateUrl();
+      },
       clearCategory() {
         this.clearSeries();
         this.selectedCategory = null;
+        this.updateUrl();
       },
       selectSeries(series) {
         this.selectedSeries = series;
+        this.updateUrl();
       },
       selectMintType(mintType) {
         this.selectedMintType = mintType;
         this.fetchCoins(this.selectedSeries.id, mintType[0]);
+        this.updateUrl();
       },
       clearSeries() {
         this.selectedSeries = null;
         this.selectedMintType = null;
         this.clearCoin();
+        this.updateUrl();
       },
       fetchCoins(id, mintType) {
         this.loading = true;
@@ -181,14 +232,17 @@
         if (this.selectedSeries && this.selectedMintType) {
           this.fetchCoins(this.selectedSeries.id, this.selectedMintType[0]);
         }
+        this.updateUrl();
       },
       filteredMintTypes() {
+        if (!this.selectedSeries) return [];
         return this.mintTypes.filter(
           mintType => (this.selectedSeries.mint_types.includes(mintType[0])));
       },
       clearMintType() {
         this.selectedMintType = null;
         this.clearCoin();
+        this.updateUrl();
       },
       selectGrade(grade) {
         this.selectedGrade = grade;
@@ -199,10 +253,12 @@
             this.coinDetails = response.data;
           }
         );
+        this.updateUrl();
       },
       clearGrade() {
         this.selectedGrade = null;
         this.coinDetails = null;
+        this.updateUrl();
       },
       fetchCertData() {
         this.loading = true;

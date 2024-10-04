@@ -1,1 +1,8 @@
-<pages-index :categories="<%= @categories.to_json %>" />
+<pages-index
+  :categories="<%= @categories.to_json %>"
+  :initial-category="<%= @category.to_json %>"
+  :initial-series="<%= @series.to_json %>"
+  :initial-coin="<%= @coin.to_json %>"
+  :initial-mint-type="'<%= @mint_type %>'"
+  :initial-grade="<%= @grade %>"
+/>
